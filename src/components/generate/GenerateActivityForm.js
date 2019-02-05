@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 
 
-export default class ActivityForm extends Component {
+export default class GenerateActivityForm extends Component {
     // Set initial state
     state = {
         activity: ""
@@ -23,7 +23,7 @@ export default class ActivityForm extends Component {
             const activities = {
                 activity: this.state.activity
             }
-              this.props.addActivities(activities)
+              this.props.addRandomActivities(activities)
               .then(() => this.props.history.push("/Home"))
             //   this.props.randomActivities(activities)
             //   .then(() => this.props.history.push("/Home"))

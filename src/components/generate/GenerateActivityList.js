@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
-export default class ActivityList extends Component {
+export default class GenerateActivityList extends Component {
     state = {
         activity: ""
     }
-
     
     constructNewActivity = evt => {
         evt.preventDefault()
@@ -16,31 +15,20 @@ export default class ActivityList extends Component {
               .then(() => this.props.history.push("/Home"))
         }
 
-        handleFieldChange = evt => {
-            const stateToChange = {}
-            stateToChange[evt.target.id] = evt.target.value
-            this.setState(stateToChange)
-        }
-    
-
     render() {
         const sortedNewsItems =
             [].concat(this.props.activities)
                 .sort((a,b) => {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
-                .reverse()
                 .map(activity =>
                         <div key={activity.id} className="card">
                         <div className="card-body">
-                            <h3 id={activity.activity}
-                            className="card-title" onChange={this.handleFieldChange}>{activity.activity}
-                            </h3>
+                            <h3 className="card-title">{activity.activity}</h3>
                             <button type="button"
-                                    id="deleteButton"
-                                    onClick = {() => this.props.deleteActivities(activity.id)}
+                                    id="saveButton"
+                                    onClick = {() => this.props.addRandomActivities(activity.id)}
                                     className="btn btn-success">
-                                Delete
+                                Save
                             </button>
-                            <Link className="nav-link" to={`/Home/${activity.id}/edit`}>Edit</Link>
                         </div>
                         </div>
                 )
@@ -48,13 +36,6 @@ export default class ActivityList extends Component {
 
         return (
             <React.Fragment>
-                <div className="activityButton">
-                    <button type="button"
-                            onClick={()=> this.props.history.push("/Home/new")}
-                            className="btn btn-success">
-                        Create Activity
-                    </button>
-                </div>
                 <br></br>
                 <div className="activityButton">
                     <button type="button"
@@ -74,4 +55,3 @@ export default class ActivityList extends Component {
         );
     }
 }
-

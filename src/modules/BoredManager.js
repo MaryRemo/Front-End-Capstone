@@ -24,5 +24,8 @@ export default {
       },
       body: JSON.stringify(existingActivity)
     }).then(data => data.json())
-  }
+  },
+  api() {
+    return fetch(`http://www.boredapi.com/api/activity/`).then(e => e.json())
+  },
 }
