@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import BoredManager from "../modules/BoredManager";
-import ActivityList from './activities/ActivityList'
+import ActivityList from './activities/ActivityList';
 import ActivityForm from "./activities/ActivityForm";
 import ActivityEditForm from "./activities/ActivityEditForm";
-import GenerateActivityList from "./generate/GenerateActivityList"
+import SharedActivities from "./share/SharedActivities";
 import GenerateActivityForm from "./generate/GenerateActivityForm"
 
 export default class ApplicationViews extends Component {
@@ -19,20 +19,26 @@ export default class ApplicationViews extends Component {
 
 
     componentDidMount() {
-        BoredManager.getAll().then(allActivities => {
+        BoredManager.getAll()
+            .then(allActivities => {
+                // let filteredActivities = allActivities.filter(activity => {
+                //   return activity.shared === true
+                // })
             this.setState({
                 activities: allActivities
             });
         });
+
     }
 
-    randomActivities = (activity) => BoredManager.api(activity)
-        .then(activities => this.setState({
-            activities: activities
-        })
+    randomActivities = (newActivity) => BoredManager.api(newActivity)
+        .then(activities =>
+            this.setState({
+                activities: activities
+            })
         )
 
-    addRandomActivities = (activity) => BoredManager.post(activity)
+    addRandomActivities = (activity) => BoredManager.postApi(activity)
         .then(() => BoredManager.getAll())
         .then(activities => this.setState({
             activities: activities
@@ -70,6 +76,19 @@ export default class ApplicationViews extends Component {
             })
     }
 
+    updateActivitiesList = (activityId, existingObj) => {
+        return BoredManager.getAll(activityId, existingObj)
+            .then(() => BoredManager.getAll())
+            .then(allActivities => {
+                let filteredActivities = allActivities.filter(activity => {
+                    return activity.share === false
+                })
+                this.setState({
+                    activity: filteredActivities
+                })
+            })
+    }
+
     render() {
         return (
 
@@ -79,30 +98,34 @@ export default class ApplicationViews extends Component {
                     return <ActivityList {...props}
                         deleteActivities={this.deleteActivities}
                         activities={this.state.activities}
+                        addActivities={this.addActivities}
                         randomActivities={this.randomActivities}
-                        // single={this.single} 
-                    />
-
-                }} />
+                        updateActivitiesList={this.updateActivitiesList}
+                        
+                        />
+                        
+                    }} />
 
                 <Route path="/Home/new" render={(props) => {
                     return <ActivityForm {...props}
-                        addActivities={this.addActivities}
+                    addActivities={this.addActivities}
                     />
                 }} />
-
-                {/* <Route path="/Home/new" render={(props) => {
+                <Route exact path="/Home/generate" render={(props) => {
                     return <GenerateActivityForm {...props}
-                        addRandomActivities={this.addRandomActivities}
-                        randomActivities={this.randomActivities}
-                    />
+                    randomActivities={this.randomActivities}
+                    addRandomActivities={this.addRandomActivities}
+                    activities={this.state.activities}
+                    addActivities={this.addActivities} />
                 }} />
 
-                <Route path="/Home" render={(props) => {
-                    return <GenerateActivityList {...props}
-                    randomActivities={this.randomActivities}
-                    />
-                }} /> */}
+
+                <Route exact path="/Activities" render={(props) => {
+                    
+                    return <SharedActivities {...props}
+                    activities={this.state.activities}
+                    updateActivitiesList={this.updateActivitiesList} />
+                }} />
 
 
                 <Route exact path="/Home/:activityId(\d+)/edit" render={props => {

@@ -1,36 +1,42 @@
 import React, { Component } from "react"
+import BoredManager from "../../modules/BoredManager"
 
 
 export default class GenerateActivityForm extends Component {
     // Set initial state
-    state = {
-        activity: ""
+     state = {
+        activity: "",
+        shared: "",
     }
-
-    // Update state whenever an input field is edited
-    handleFieldChange = evt => {
-        const stateToChange = {}
-        stateToChange[evt.target.id] = evt.target.value
-        this.setState(stateToChange)
+    componentDidMount() {
+        BoredManager.api().then(allActivities => {
+            console.log(allActivities)
+            this.setState({
+                activity: allActivities.activity
+            });
+        });
     }
+    // getRandomActivities(){
+    //     BoredManager.api()
+    //     .then(response => {
+    //         console.log(response)
+    //     })
+    // }
 
-    /*
-        Local method for validation, creating animal object, and
-        invoking the function reference passed from parent component
-     */
-    constructNewActivity = evt => {
+    constructNewActivities = evt => {
         evt.preventDefault()
-            const activities = {
-                activity: this.state.activity
-            }
-              this.props.addRandomActivities(activities)
-              .then(() => this.props.history.push("/Home"))
-            //   this.props.randomActivities(activities)
-            //   .then(() => this.props.history.push("/Home"))
-              // .then(() => TaskManager.getAll());
+        const activities = {
+            activity: this.state.activity
         }
+        this.props.addActivities(activities)
+        .then(() => console.log(activities))
+        .then(() => this.props.history.push("/Home"))
+        
+    }
+              
 
     render() {
+        console.log(this.state.activity)
         return (
             <React.Fragment>
                 <form className="activityForm">
@@ -38,11 +44,14 @@ export default class GenerateActivityForm extends Component {
                         <label htmlFor="activityName">Activity</label>
                         <input type="text" required
                                className="form-control"
-                               onChange={this.handleFieldChange}
-                               id="activity"
-                               placeholder="Activity" />
+                            //    onChange={this.handleFieldChange}
+                               id="activity" 
+                               value={this.state.activity}
+                               />
                     </div>
-                    <button type="submit" onClick={this.constructNewActivity} className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={this.constructNewActivities} className="btn btn-primary">Save</button>
+
+                    <button type="submit" onClick={()=> this.props.history.push("/Home")} className="btn btn-primary">Back</button>
                 </form>
             </React.Fragment>
         )
