@@ -4,8 +4,11 @@ import React, { Component } from "react"
 export default class ActivityForm extends Component {
     // Set initial state
     state = {
-        activity: ""
-    }
+        activity:"",
+        timeStamp:"",
+        shared:false,
+        userId: 1
+      }
 
     // Update state whenever an input field is edited
     handleFieldChange = evt => {
@@ -21,8 +24,12 @@ export default class ActivityForm extends Component {
     constructNewActivity = evt => {
         evt.preventDefault()
             const activities = {
-                activity: this.state.activity
+                activity: this.state.activity,
+                shared:this.state.shared,
+                timeStamp:this.state.timeStamp,
+                userId: this.state.userId
             }
+            console.log(activities)
               this.props.addActivities(activities)
               .then(() => this.props.history.push("/Home"))
             //   this.props.randomActivities(activities)

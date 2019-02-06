@@ -4,10 +4,12 @@ import BoredManager from "../../modules/BoredManager"
 
 export default class GenerateActivityForm extends Component {
     // Set initial state
-     state = {
-        activity: "",
-        shared: "",
-    }
+    state = {
+        activity:"",
+        timeStamp:"",
+        shared:false,
+        userId: 1
+      }
     componentDidMount() {
         BoredManager.api().then(allActivities => {
             console.log(allActivities)
