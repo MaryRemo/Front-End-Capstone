@@ -25,6 +25,8 @@ export default class ActivityForm extends Component {
             }
               this.props.addActivities(activities)
               .then(() => this.props.history.push("/Home"))
+            //   this.props.randomActivities(activities)
+            //   .then(() => this.props.history.push("/Home"))
               // .then(() => TaskManager.getAll());
         }
 
