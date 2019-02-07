@@ -97,11 +97,11 @@ export default class ApplicationViews extends Component {
         return BoredManager.getAllSharedActivities(activityId, existingObj)
             .then(() => BoredManager.getAll())
             .then(allActivities => {
-                let filteredActivities = allActivities.filter(activity => {
-                    return activity.shared === false
-                })
+                // let filteredActivities = allActivities.filter(activity => {
+                //     return activity.shared === false
+                // })
                 this.setState({
-                    activity: filteredActivities
+                    activities: allActivities
                 })
             })
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+// import $ from 'jquery'
 
 export default class ActivityList extends Component {
     state = {
@@ -32,12 +33,17 @@ export default class ActivityList extends Component {
         //         .sort((a,b) => {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
         //         .reverse()
                 this.props.activities.map(activity =>
+                    <React.Fragment>
                         <div key={activity.id} className="card">
                         <div className="card-body">
                             <h3 id="{activity.activity}"
                             className="card-title" onChange={this.handleFieldChange}>{activity.activity}
                             </h3>
-                            <p>Share <input 
+
+                            {activity.shared === false &&
+                              
+            
+                            <p>Share <input className="checkbox"
                 id = {activity.id}
                 type = "checkbox"
                 // on click of checkbox - we are keeping the task value and the expected completion date but changes the default
@@ -51,9 +57,10 @@ export default class ActivityList extends Component {
                   console.log(sharedActivity)
                   this.props.updateActivitiesList(activity.id , sharedActivity)
                   .then(() => this.props.history.push("/Home"))
+
                   }
                 }
-                /> </p>
+                /> </p>  }
                             <button type="button"
                                     id="deleteButton"
                                     onClick = {() => this.props.deleteActivities(activity.id)}
@@ -63,6 +70,7 @@ export default class ActivityList extends Component {
                             <Link className="nav-link" to={`/Home/${activity.id}/edit`}>Edit</Link>
                         </div>
                         </div>
+                        </React.Fragment>
                 )
 
 
