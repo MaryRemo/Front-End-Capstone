@@ -9,6 +9,8 @@ import GenerateActivityForm from "./generate/GenerateActivityForm";
 import LoginManager from "../modules/LoginManager"
 import Login from "./authentication/Login"
 import LoginForm from "./authentication/LoginForm"
+import SearchResults from './search/SearchResults'
+import SearchInput from './search/Search'
 
 export default class ApplicationViews extends Component {
 
@@ -207,6 +209,25 @@ export default class ApplicationViews extends Component {
                     }
                 }} />
 
+                <Route path="/Friends" render={(props) => {
+                    if (this.isAuthenticated()) {
+                        return <SearchInput {...this.props}/>
+                    }
+                    else {
+                        return <Redirect to="/login" />
+                    }
+                }} />
+
+                <Route path="/Friends" render={(props) => {
+                    if (this.isAuthenticated()) {
+                        return <SearchResults {...this.props}/>
+                    }
+                    else {
+                        return <Redirect to="/login" />
+                    }
+                }}
+
+                />
 
             </React.Fragment >
         )
