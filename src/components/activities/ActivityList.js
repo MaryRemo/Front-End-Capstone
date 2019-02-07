@@ -41,9 +41,7 @@ export default class ActivityList extends Component {
                             </h3>
 
                             {activity.shared === false &&
-                              
-            
-                            <p>Share <input className="checkbox"
+                 <p>Share <input className="checkbox"
                 id = {activity.id}
                 type = "checkbox"
                 // on click of checkbox - we are keeping the task value and the expected completion date but changes the default

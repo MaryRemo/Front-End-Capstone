@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+// import BoredManager from "../../modules/BoredManager"
 
 export default class SharedActivities extends Component {
-    // state = {
-    //     activity:[],
-    //     timeStamp:[],
-    //     shared:false,
-    //     userId: 1
-    //   }
-      handleFieldChange = evt => {
-        // const stateToChange = {}
-        // stateToChange[evt.target.id] = evt.target.value
-        // this.setState(stateToChange)
-    }
+// componentDidUpdate() {
+//     BoredManager.sharedActivities().then(allActivities => {
+//         this.setState({
+//             sharedActivity: allActivities
+//         });
+//         console.log("newthing", this.state.sharedActivity)
+//     });
+// }
     render(){
         console.log("sharedActivity", this.props.activities)
         return(
-           
+          
                     this.props.sharedActivity.map(activity =>
                         // eslint-disable-next-line jsx-a11y/heading-has-content
                       
@@ -41,6 +39,3 @@ export default class SharedActivities extends Component {
     }
 } 
 
-// this.props.sharedActivity.map(activity =>
-//     // eslint-disable-next-line jsx-a11y/heading-has-content
-//     <h3  key={activity.id} id="{activity.activity}">{activity.activity}</h3>
