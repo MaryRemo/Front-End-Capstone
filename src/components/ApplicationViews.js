@@ -13,6 +13,7 @@ export default class ApplicationViews extends Component {
         users: [],
         followers: [],
         activities: [],
+        sharedActivity:[],
         comments: [],
         messages: []
     };
@@ -27,15 +28,22 @@ export default class ApplicationViews extends Component {
             this.setState({
                 activities: allActivities
             });
+            console.log("firstthing", this.state.activities)
+        });
+        BoredManager.sharedActivities().then(allActivities => {
+            this.setState({
+                sharedActivity: allActivities
+            });
+            console.log("newthing",this.state.sharedActivity)
         });
 
     }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
-        .then(activities =>
-            this.setState({
-                activities: activities
-            })
+    .then(activities =>
+        this.setState({
+            activities: activities
+        })
         )
 
     addRandomActivities = (activity) => BoredManager.postApi(activity)
@@ -76,12 +84,21 @@ export default class ApplicationViews extends Component {
             })
     }
 
+    sharedActivity = () => {
+        return BoredManager.sharedActivity()
+            .then(activity => {
+                this.setState({
+                    activities: activity
+                })
+            })
+    }
+
     updateActivitiesList = (activityId, existingObj) => {
-        return BoredManager.getAll(activityId, existingObj)
+        return BoredManager.getAllSharedActivities(activityId, existingObj)
             .then(() => BoredManager.getAll())
             .then(allActivities => {
                 let filteredActivities = allActivities.filter(activity => {
-                    return activity.share === false
+                    return activity.shared === false
                 })
                 this.setState({
                     activity: filteredActivities
@@ -119,12 +136,13 @@ export default class ApplicationViews extends Component {
                     addActivities={this.addActivities} />
                 }} />
 
-
-                <Route exact path="/Activities" render={(props) => {
-                    
+                <Route exact path="/Activities" render={(props) => { 
                     return <SharedActivities {...props}
-                    activities={this.state.activities}
-                    updateActivitiesList={this.updateActivitiesList} />
+                    sharedActivity={this.state.sharedActivity} 
+                    deleteActivities={this.deleteActivities}
+                    updateActivitiesList={this.updateActivitiesList}
+                    addActivities={this.addActivities}
+                    />
                 }} />
 
 

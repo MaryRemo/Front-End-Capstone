@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
-import BoredManager from '../../modules/BoredManager';
 
 export default class ActivityList extends Component {
-    // state = {
-    //     activity: ""
-    // }
+    state = {
+        shared: false
+    }
 
     handleFieldChange = evt => {
-        const stateToChange = {}
-        stateToChange[evt.target.id] = evt.target.value
-        this.setState(stateToChange)
+        evt.preventDefault()
+        this.setState({
+            shared:!this.state.shared
+        })
     }
     
 
@@ -26,7 +26,7 @@ export default class ActivityList extends Component {
 
 
     render() {
-        console.log(this.props.activities)
+        console.log("this", this.props.activities)
         const sortedActivitiesItems =
         //     [].concat(this.props.activities)
         //         .sort((a,b) => {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
@@ -50,7 +50,7 @@ export default class ActivityList extends Component {
                   }
                   console.log(sharedActivity)
                   this.props.updateActivitiesList(activity.id , sharedActivity)
-                  .then(() => this.props.history.push("/Activities"))
+                  .then(() => this.props.history.push("/Home"))
                   }
                 }
                 /> </p>
@@ -61,12 +61,6 @@ export default class ActivityList extends Component {
                                 Delete
                             </button>
                             <Link className="nav-link" to={`/Home/${activity.id}/edit`}>Edit</Link>
-                            <button type="button"
-                            id="shareButton"
-                            onClick = {() => this.props.shareActivities(activity.id)}
-                            className="btn btn-success">
-                            Share
-                            </button>
                         </div>
                         </div>
                 )
