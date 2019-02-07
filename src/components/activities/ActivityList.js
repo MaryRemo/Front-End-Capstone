@@ -26,7 +26,7 @@ export default class ActivityList extends Component {
 
 
     render() {
-        console.log(this.props.activities)
+        console.log("this", this.props.activities)
         const sortedActivitiesItems =
         //     [].concat(this.props.activities)
         //         .sort((a,b) => {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})

@@ -28,21 +28,22 @@ export default class ApplicationViews extends Component {
             this.setState({
                 activities: allActivities
             });
+            console.log("firstthing", this.state.activities)
         });
         BoredManager.sharedActivities().then(allActivities => {
             this.setState({
                 sharedActivity: allActivities
             });
-            console.log(this.state.sharedActivity)
+            console.log("newthing",this.state.sharedActivity)
         });
 
     }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
-        .then(activities =>
-            this.setState({
-                activities: activities
-            })
+    .then(activities =>
+        this.setState({
+            activities: activities
+        })
         )
 
     addRandomActivities = (activity) => BoredManager.postApi(activity)
@@ -137,7 +138,11 @@ export default class ApplicationViews extends Component {
 
                 <Route exact path="/Activities" render={(props) => { 
                     return <SharedActivities {...props}
-                    sharedActivity={this.state.sharedActivity} />
+                    sharedActivity={this.state.sharedActivity} 
+                    deleteActivities={this.deleteActivities}
+                    updateActivitiesList={this.updateActivitiesList}
+                    addActivities={this.addActivities}
+                    />
                 }} />
 
 

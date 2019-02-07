@@ -28,7 +28,10 @@ export default class GenerateActivityForm extends Component {
     constructNewActivities = evt => {
         evt.preventDefault()
         const activities = {
-            activity: this.state.activity
+            activity: this.state.activity,
+            shared:this.state.shared,
+            timeStamp:this.state.timeStamp,
+            userId: this.state.userId
         }
         this.props.addActivities(activities)
         .then(() => console.log(activities))
