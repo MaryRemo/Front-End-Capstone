@@ -28,6 +28,11 @@ export default class ApplicationViews extends Component {
 
 
     componentDidMount() {
+
+        LoginManager.getAll().then(allUsers => {
+            this.setState({ users: allUsers });
+          })
+
         BoredManager.getAll()
             .then(allActivities => {
                 // let filteredActivities = allActivities.filter(activity => {
@@ -46,6 +51,19 @@ export default class ApplicationViews extends Component {
         });
 
     }
+
+    updateComponent = () => {
+
+       LoginManager.getAll().then(allUsers => {
+          this.setState({ users: allUsers });
+        })
+    
+    
+        BoredManager.getAll()
+          .then(allActivities => {
+            this.setState({ activities: allActivities })
+          })
+        }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
         .then(activities =>
@@ -138,7 +156,8 @@ export default class ApplicationViews extends Component {
                     return <Login {...props} component={Login}
 
                         verifyUser={this.verifyUser}
-                        users={this.state.users} />
+                        users={this.state.users} 
+                        updateComponent={this.updateComponent}/>
                 }} />
 
                 <Route exact path="/login/new" render={(props) => {
@@ -146,7 +165,8 @@ export default class ApplicationViews extends Component {
                         return <LoginForm {...props}
                             users={this.state.users}
                             addUser={this.addUser}
-                            userId={this.state.userId} />
+                            userId={this.state.userId}
+                            updateComponent={this.updateComponent} />
                     } else {
                         return <Redirect to="/login" />
                     }
@@ -160,6 +180,8 @@ export default class ApplicationViews extends Component {
                             addActivities={this.addActivities}
                             randomActivities={this.randomActivities}
                             updateActivitiesList={this.updateActivitiesList}
+                            users={this.users}
+                            updateComponent={this.updateComponent}
 
                         />
                     } else {
@@ -193,6 +215,8 @@ export default class ApplicationViews extends Component {
                             deleteActivities={this.deleteActivities}
                             updateActivitiesList={this.updateActivitiesList}
                             addActivities={this.addActivities}
+                            users={this.state.users}
+                            // activities={this.activities}
                         />
                     } else {
                         return <Redirect to="/login" />

@@ -13,6 +13,7 @@ export default class SharedActivities extends Component {
 // }
     render(){
         console.log("sharedActivity", this.props.activities)
+        let userId = sessionStorage.getItem("user")
         return(
           
                     this.props.sharedActivity.map(activity =>
@@ -20,6 +21,7 @@ export default class SharedActivities extends Component {
                       
                             <div className="card">
                             <div className="card-body">
+                            <p>{userId}</p>
                             <h3 className="card-title" key={activity.id} id="{activity.activity}">{activity.activity}</h3>
                                 
                                 <button type="button"

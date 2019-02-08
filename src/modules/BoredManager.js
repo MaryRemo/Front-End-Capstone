@@ -6,7 +6,11 @@ export default {
     return fetch(`${remoteURL}/activities/${id}`).then(e => e.json())
   },
   getAll() {
-    return fetch(`${remoteURL}/activities`).then(e => e.json())
+    let sessionUser = sessionStorage.getItem("user")
+    let sessionUserNumber = Number(sessionUser)
+    let getAllUsersActivities = `${remoteURL}/activities?userId=${sessionUserNumber}`
+    console.log(getAllUsersActivities)
+    return fetch(getAllUsersActivities).then(e => e.json())
   },
   post(newActivity) {
     return fetch(`${remoteURL}/activities`, {

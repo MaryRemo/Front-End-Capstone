@@ -8,7 +8,7 @@ export default class GenerateActivityForm extends Component {
         activity:"",
         timeStamp:"",
         shared:false,
-        userId: 1
+        userId: ""
       }
     componentDidMount() {
         BoredManager.api().then(allActivities => {
@@ -31,7 +31,7 @@ export default class GenerateActivityForm extends Component {
             activity: this.state.activity,
             shared:this.state.shared,
             timeStamp:this.state.timeStamp,
-            userId: this.state.userId
+            userId: sessionStorage.getItem("user")
         }
         this.props.addActivities(activities)
         .then(() => console.log(activities))

@@ -34,6 +34,9 @@ onLogin = (evt) => {
                         }
                     if (loggedIn === true){
                         sessionStorage.setItem("user", user.id);
+
+                        this.props.updateComponent()
+
                         this.props.history.push("/Home");
                     }
                 })
