@@ -8,7 +8,7 @@ export default {
   getAll() {
     let sessionUser = sessionStorage.getItem("user")
     let sessionUserNumber = Number(sessionUser)
-    let getAllUsersActivities = `${remoteURL}/activities?userId=${sessionUserNumber}`
+    let getAllUsersActivities = `${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`
     console.log(getAllUsersActivities)
     return fetch(getAllUsersActivities).then(e => e.json())
   },
@@ -46,6 +46,8 @@ export default {
   },
 
   sharedActivities() {
-    return fetch(`http://localhost:5002/activities?shared=true`).then(e => e.json())
+    let sharedWithUsers = `http://localhost:5002/activities?shared=true&_expand=user`
+    return fetch(sharedWithUsers).then(e => e.json())
   }
 }
+

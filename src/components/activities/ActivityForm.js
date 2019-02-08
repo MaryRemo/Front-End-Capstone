@@ -7,7 +7,7 @@ export default class ActivityForm extends Component {
         activity:"",
         timeStamp:"",
         shared:false,
-        userId: Number
+        userId: ""
       }
 
     // Update state whenever an input field is edited
@@ -27,7 +27,7 @@ export default class ActivityForm extends Component {
                 activity: this.state.activity,
                 shared:this.state.shared,
                 timeStamp:this.state.timeStamp,
-                userId: sessionStorage.getItem("user")
+                userId: Number(sessionStorage.getItem("user"))
             }
             console.log(activities)
               this.props.addActivities(activities)

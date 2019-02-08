@@ -16,7 +16,6 @@ export default class ActivityList extends Component {
 
 
     render() {
-        let userId = sessionStorage.getItem("user")
 
         console.log("this", this.props.activities)
         const sortedActivitiesItems =
@@ -27,7 +26,7 @@ export default class ActivityList extends Component {
                 <React.Fragment>
                     <div key={activity.id} className="card">
                         <div className="card-body">
-                            <p>{userId}</p>
+                            <p>{activity.user.username}</p>
                             <h3 id="{activity.activity}"
                                 className="card-title" onChange={this.handleFieldChange}>{activity.activity}
                             </h3>
@@ -42,7 +41,7 @@ export default class ActivityList extends Component {
                                         const sharedActivity = {
                                             activity: activity.activity,
                                             shared: !this.state.shared,
-                                            userId: 1
+                                            userId: Number(sessionStorage.getItem("user"))
                                         }
                                         console.log(sharedActivity)
                                         this.props.updateActivitiesList(activity.id, sharedActivity)

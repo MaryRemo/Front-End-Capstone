@@ -12,6 +12,7 @@ import LoginForm from "./authentication/LoginForm"
 import SearchResults from './search/SearchResults'
 import SearchInput from './search/Search'
 
+const remoteURL = "http://localhost:5002"
 export default class ApplicationViews extends Component {
 
     // isAuthenticated = () => sessionStorage.getItem("credentials") !== null
@@ -41,13 +42,13 @@ export default class ApplicationViews extends Component {
                 this.setState({
                     activities: allActivities
                 });
-                console.log("firstthing", allActivities)
+                // console.log("firstthing", allActivities)
             });
         BoredManager.sharedActivities().then(allActivities => {
             this.setState({
                 sharedActivity: allActivities
             });
-            console.log("newthing", allActivities)
+            // console.log("newthing", allActivities)
         });
 
     }
@@ -63,6 +64,13 @@ export default class ApplicationViews extends Component {
           .then(allActivities => {
             this.setState({ activities: allActivities })
           })
+
+          BoredManager.sharedActivities().then(allActivities => {
+            this.setState({
+                sharedActivity: allActivities
+            });
+            // console.log("newthing", allActivities)
+        });
         }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
@@ -87,11 +95,15 @@ export default class ApplicationViews extends Component {
         )
 
     deleteActivities = id => {
-        return fetch(`http://localhost:5002/activities/${id}`, {
+        let sessionUser = sessionStorage.getItem("user")
+        let sessionUserNumber = Number(sessionUser)
+        let getAllUsersActivities = `${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`
+        console.log(getAllUsersActivities)
+        return fetch(`${remoteURL}/activities/${id}`, {
             method: "DELETE"
         })
             .then(response => response.json())
-            .then(() => fetch(`http://localhost:5002/activities`))
+            .then(() => fetch(getAllUsersActivities))
             .then(response => response.json())
             .then(activity =>
                 this.setState({
