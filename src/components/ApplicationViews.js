@@ -11,6 +11,7 @@ import Login from "./authentication/Login"
 import LoginForm from "./authentication/LoginForm"
 import SearchResults from './search/SearchResults'
 import SearchInput from './search/Search'
+import FriendsManager from "../modules/FriendsManager"
 
 const remoteURL = "http://localhost:5002"
 export default class ApplicationViews extends Component {
@@ -32,7 +33,7 @@ export default class ApplicationViews extends Component {
 
         LoginManager.getAll().then(allUsers => {
             this.setState({ users: allUsers });
-          })
+        })
 
         BoredManager.getAll()
             .then(allActivities => {
@@ -45,33 +46,40 @@ export default class ApplicationViews extends Component {
                 // console.log("firstthing", allActivities)
             });
         BoredManager.sharedActivities().then(allActivities => {
+            console.log("wow", allActivities)
             this.setState({
                 sharedActivity: allActivities
             });
             // console.log("newthing", allActivities)
+        });
+
+        FriendsManager.getAll().then(allFollowers => {
+            // console.log("wow", allFriends)
+            this.setState({
+                followers: allFollowers
+            });
         });
 
     }
 
     updateComponent = () => {
 
-       LoginManager.getAll().then(allUsers => {
-          this.setState({ users: allUsers });
+        LoginManager.getAll().then(allUsers => {
+            this.setState({ users: allUsers });
         })
-    
-    
-        BoredManager.getAll()
-          .then(allActivities => {
-            this.setState({ activities: allActivities })
-          })
 
-          BoredManager.sharedActivities().then(allActivities => {
+
+        BoredManager.getAll()
+            .then(allActivities => {
+                this.setState({ activities: allActivities })
+            })
+
+        BoredManager.sharedActivities().then(allActivities => {
             this.setState({
                 sharedActivity: allActivities
             });
-            // console.log("newthing", allActivities)
         });
-        }
+    }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
         .then(activities =>
@@ -112,6 +120,18 @@ export default class ApplicationViews extends Component {
             );
     };
 
+    deleteFollowers = id => {
+        return fetch(`${remoteURL}/followers/${id}`, {
+            method: "DELETE"
+        })
+            .then(response => response.json())
+            .then(activity =>
+                this.setState({
+                    followers: activity
+                })
+            );
+    };
+
     updateActivity = (activityId, editedActivityObj) => {
         return BoredManager.put(activityId, editedActivityObj)
             .then(() => BoredManager.getAll())
@@ -136,7 +156,16 @@ export default class ApplicationViews extends Component {
             .then(() => BoredManager.getAll())
             .then(allActivities => {
                 this.setState({
-                    sharedActivity: allActivities,
+                    sharedActivity: allActivities
+                })
+            })
+
+    }
+    updateActivitiesList = (activityId, existingObj) => {
+        return BoredManager.getAllSharedActivities(activityId, existingObj)
+            .then(() => BoredManager.getAll())
+            .then(allActivities => {
+                this.setState({
                     activities: allActivities
                 })
             })
@@ -157,6 +186,9 @@ export default class ApplicationViews extends Component {
                     users: user
                 })
             );
+    addFriend = friendObj =>
+        FriendsManager.postNewFollower(friendObj)
+            
 
     render() {
         return (
@@ -168,8 +200,8 @@ export default class ApplicationViews extends Component {
                     return <Login {...props} component={Login}
 
                         verifyUser={this.verifyUser}
-                        users={this.state.users} 
-                        updateComponent={this.updateComponent}/>
+                        users={this.state.users}
+                        updateComponent={this.updateComponent} />
                 }} />
 
                 <Route exact path="/login/new" render={(props) => {
@@ -228,7 +260,6 @@ export default class ApplicationViews extends Component {
                             updateActivitiesList={this.updateActivitiesList}
                             addActivities={this.addActivities}
                             users={this.state.users}
-                            // activities={this.activities}
                         />
                     } else {
                         return <Redirect to="/login" />
@@ -247,7 +278,7 @@ export default class ApplicationViews extends Component {
 
                 <Route path="/Friends" render={(props) => {
                     if (this.isAuthenticated()) {
-                        return <SearchInput {...this.props}/>
+                        return <SearchInput {...this.props} />
                     }
                     else {
                         return <Redirect to="/login" />
@@ -256,7 +287,10 @@ export default class ApplicationViews extends Component {
 
                 <Route path="/Friends" render={(props) => {
                     if (this.isAuthenticated()) {
-                        return <SearchResults {...this.props}/>
+                        return <SearchResults {...this.props}
+                        addFriend={this.addFriend} 
+                        deleteFollowers={this.deleteFollowers}
+                        />
                     }
                     else {
                         return <Redirect to="/login" />

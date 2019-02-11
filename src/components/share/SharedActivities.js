@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 // import BoredManager from "../../modules/BoredManager"
 
 export default class SharedActivities extends Component {
+    state = {
+        sharedActivity: [],
+    };
+
 
     render(){
         console.log("sharedActivity", this.props.activities)
