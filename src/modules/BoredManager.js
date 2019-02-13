@@ -12,6 +12,13 @@ export default {
     console.log(getAllUsersActivities)
     return fetch(getAllUsersActivities).then(e => e.json())
   },
+  getAllSharedActivities() {
+    let sessionUser = sessionStorage.getItem("user")
+    let sessionUserNumber = Number(sessionUser)
+    let getAllSharedActivities = `${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`
+    console.log(getAllSharedActivities)
+    return fetch(getAllSharedActivities).then(e => e.json())
+  },
   post(newActivity) {
     return fetch(`${remoteURL}/activities`, {
       method: "POST",
@@ -31,7 +38,7 @@ export default {
     }).then(data => data.json())
   },
 
-  getAllSharedActivities(activityId, existingActivity) {
+  putSharedActivities(activityId, existingActivity) {
     return fetch(`${remoteURL}/activities/${activityId}`, {
       method: "PUT",
       headers: {
@@ -47,6 +54,20 @@ export default {
 
   sharedActivities() {
     let sharedWithUsers = `http://localhost:5002/activities?shared=true&_expand=user`
+    return fetch(sharedWithUsers).then(e => e.json())
+  },
+  mySharedActivities(){
+    let sessionUser = sessionStorage.getItem("user")
+    let sessionUserNumber = Number(sessionUser)
+    console.log(sessionUserNumber)
+    let sharedWithUsers = `http://localhost:5002/activities?shared=true&_expand=user&userId=${sessionUserNumber}`
+    return fetch(sharedWithUsers).then(e => e.json())
+  },
+  followersSharedActivities() {
+    let sessionUser = sessionStorage.getItem("user")
+    let sessionUserNumber = Number(sessionUser)
+    console.log(sessionUserNumber)
+    let sharedWithUsers = `http://localhost:5002/followers?_expand=user&currentUserId=${sessionUserNumber}`
     return fetch(sharedWithUsers).then(e => e.json())
   }
 }

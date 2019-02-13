@@ -25,40 +25,34 @@ export default class ApplicationViews extends Component {
         sharedActivity: [],
         comments: [],
         messages: [],
-        userId: sessionStorage.getItem("user")
+        userId: sessionStorage.getItem("user"),
+        myFollowers: []
     };
 
 
     componentDidMount() {
+        let newState = {}
+        LoginManager.getAll().then(allUsers =>
+            newState.users = allUsers
+        ).then(() =>
 
-        LoginManager.getAll().then(allUsers => {
-            this.setState({ users: allUsers });
-        })
+            BoredManager.getAll()
+                .then(allActivities =>
+                    newState.activities = allActivities
+                )).then(() =>
 
-        BoredManager.getAll()
-            .then(allActivities => {
-                // let filteredActivities = allActivities.filter(activity => {
-                //   return activity.shared === true
-                // })
-                this.setState({
-                    activities: allActivities
-                });
-                // console.log("firstthing", allActivities)
-            });
-        BoredManager.sharedActivities().then(allActivities => {
-            console.log("wow", allActivities)
-            this.setState({
-                sharedActivity: allActivities
-            });
-            // console.log("newthing", allActivities)
-        });
+                    BoredManager.sharedActivities().then(allActivities =>
+                        newState.sharedActivity = allActivities
+                    )).then(() =>
 
-        FriendsManager.getAll().then(allFollowers => {
-            // console.log("wow", allFriends)
-            this.setState({
-                followers: allFollowers
-            });
-        });
+                        BoredManager.followersSharedActivities().then(follow =>
+                            newState.myFollowers = follow
+                        )).then(() =>
+
+
+                            FriendsManager.getAll().then(allFollowers =>
+                                newState.followers = allFollowers
+                            )).then(() => this.setState(newState))
 
     }
 
@@ -71,53 +65,56 @@ export default class ApplicationViews extends Component {
 
         BoredManager.getAll()
             .then(allActivities => {
-                this.setState({ activities: allActivities })
+                this.setState({
+                    activities: allActivities
+                })
             })
 
-        BoredManager.sharedActivities().then(allActivities => {
-            this.setState({
-                sharedActivity: allActivities
-            });
-        });
     }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
-        .then(activities =>
+        .then(randomActivity =>
             this.setState({
-                activities: activities
+                activities: randomActivity
             })
         )
 
     addRandomActivities = (activity) => BoredManager.postApi(activity)
         .then(() => BoredManager.getAll())
-        .then(activities => this.setState({
-            activities: activities
+        .then(activity => this.setState({
+            activities: activity
         })
         )
 
     addActivities = (activity) => BoredManager.post(activity)
         .then(() => BoredManager.getAll())
-        .then(activities => this.setState({
-            activities: activities
+        .then(activity => this.setState({
+            activities: activity
         })
         )
+
 
     deleteActivities = id => {
         let sessionUser = sessionStorage.getItem("user")
         let sessionUserNumber = Number(sessionUser)
-        let getAllUsersActivities = `${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`
-        console.log(getAllUsersActivities)
-        return fetch(`${remoteURL}/activities/${id}`, {
+        return fetch(`http://localhost:5002/activities/${id}`, {
             method: "DELETE"
         })
             .then(response => response.json())
-            .then(() => fetch(getAllUsersActivities))
+            .then(() => fetch(`${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`))
             .then(response => response.json())
             .then(activity =>
                 this.setState({
                     activities: activity
                 })
-            );
+            )
+            .then(() => BoredManager.sharedActivities())
+            .then(allActivities => {
+                this.setState({
+                    sharedActivity: allActivities
+                })
+            })
+
     };
 
     deleteFollowers = id => {
@@ -140,20 +137,26 @@ export default class ApplicationViews extends Component {
                     activities: activity
                 })
             })
-    }
-
-    sharedActivity = () => {
-        return BoredManager.sharedActivity()
+            .then(() => BoredManager.sharedActivities())
             .then(activity => {
                 this.setState({
-                    activities: activity
+                    sharedActivity: activity
                 })
             })
+
+
     }
 
+
     updateActivitiesList = (activityId, existingObj) => {
-        return BoredManager.getAllSharedActivities(activityId, existingObj)
-            .then(() => BoredManager.getAll())
+        console.log("this is working")
+        return BoredManager.putSharedActivities(activityId, existingObj)
+            .then(() => BoredManager.getAll()).then(activities => {
+                this.setState({
+                    activities: activities
+                })
+            })
+            .then(() => BoredManager.sharedActivities())
             .then(allActivities => {
                 this.setState({
                     sharedActivity: allActivities
@@ -161,16 +164,7 @@ export default class ApplicationViews extends Component {
             })
 
     }
-    updateActivitiesList = (activityId, existingObj) => {
-        return BoredManager.getAllSharedActivities(activityId, existingObj)
-            .then(() => BoredManager.getAll())
-            .then(allActivities => {
-                this.setState({
-                    activities: allActivities
-                })
-            })
 
-    }
     verifyUser = (username, password) => {
         LoginManager.getUsernameAndPassword(username, password)
             .then(allUsers => this.setState({
@@ -188,9 +182,22 @@ export default class ApplicationViews extends Component {
             );
     addFriend = friendObj =>
         FriendsManager.postNewFollower(friendObj)
-            
+
+    followersActivities = () => {
+        BoredManager.followersSharedActivities().then(allFollowers => console.log(allFollowers))
+    }
+
+    mySharedActivities = () => {
+        BoredManager.mySharedActivities().then(shared => console.log(shared))
+    }
+
 
     render() {
+
+        // this.followersActivities()
+        // console.log("is this doing anything", this.followersActivities())
+        console.log("SHARED", this.state.sharedActivity)
+        console.log("ALL", this.state.activities)
         return (
 
             <React.Fragment>
@@ -245,7 +252,8 @@ export default class ApplicationViews extends Component {
                             randomActivities={this.randomActivities}
                             addRandomActivities={this.addRandomActivities}
                             activities={this.state.activities}
-                            addActivities={this.addActivities} />
+                            addActivities={this.addActivities}
+                            activiti />
 
                     } else {
                         return <Redirect to="/login" />
@@ -257,9 +265,14 @@ export default class ApplicationViews extends Component {
                         return <SharedActivities {...props}
                             sharedActivity={this.state.sharedActivity}
                             deleteActivities={this.deleteActivities}
-                            updateActivitiesList={this.updateActivitiesList}
+                            activities={this.state.activities}
                             addActivities={this.addActivities}
-                            users={this.state.users}
+                            randomActivities={this.randomActivities}
+                            updateActivitiesList={this.updateActivitiesList}
+                            users={this.users}
+                            updateComponent={this.updateComponent}
+                            myFollowers={this.state.myFollowers}
+                            mySharedActivities={this.state.mySharedActivities}
                         />
                     } else {
                         return <Redirect to="/login" />
@@ -288,8 +301,8 @@ export default class ApplicationViews extends Component {
                 <Route path="/Friends" render={(props) => {
                     if (this.isAuthenticated()) {
                         return <SearchResults {...this.props}
-                        addFriend={this.addFriend} 
-                        deleteFollowers={this.deleteFollowers}
+                            addFriend={this.addFriend}
+                            deleteFollowers={this.deleteFollowers}
                         />
                     }
                     else {

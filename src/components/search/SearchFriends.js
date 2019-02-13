@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class SearchResults extends Component {
+export default class SearchFriends extends Component {
 
   constructFollower = (userId) => {
           const friendObj = {
@@ -18,12 +18,6 @@ export default class SearchResults extends Component {
           <h2>{Object.keys(this.props)[0]}</h2>
           {this.props.users.map(result => (
             <p>{result.username}
-            <button type="button"
-                                id="addButton"
-                                onClick={
-                                    () => this.constructFollower(result.id)}
-                                className="btn btn-success">
-                                Follow</button>
                                 <button type="button"
                                 id="deleteButton"
                                 onClick={() => this.props.deleteFollowers(result.id)}

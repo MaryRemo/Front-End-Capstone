@@ -4,6 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 
 class NavBar extends Component {
+
+    handleItemClick = () => {
+        sessionStorage.clear();
+    }
     render() {
         return (
             <nav className="navbar navbar-dark bg-dark light-blue flex-md-nowrap p-0 shadow">
@@ -16,6 +20,9 @@ class NavBar extends Component {
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link" to="/Activities">Activities</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" onClick={this.handleItemClick}to="/Login">Logout</Link>
                     </li>
                 </ul>
             </nav>

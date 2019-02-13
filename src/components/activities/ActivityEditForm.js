@@ -6,8 +6,9 @@ export default class ActivityEditForm extends Component {
     state = {
         "activity": "",
         "timeStamp": "",
-        "userId": "",
-        "id": ""
+        "shared": false,
+        "userId": 0,
+        "id": 0
     }
 
     handleFieldChange = evt => {
@@ -38,6 +39,7 @@ console.log(this.props.match.params.activityId, existingActivity)
         this.setState({
             activity: active.activity,
             timeStamp: active.timeStamp,
+            shared: active.shared,
             userId: Number(sessionStorage.getItem("user")),
             id: active.id
         })

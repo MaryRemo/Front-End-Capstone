@@ -21,13 +21,13 @@ class SearchInput extends Component{
         return(
             <React.Fragment>
                 <form className="searchForm" onSubmit={this.handleSearch}>
-                <label>Search Friends</label>
                 <input
                 type="text"
                 required
                 className="form-control"
                 onChange={this.handleFieldChange}
                 id="searchQuery"
+                placeholder="Search"
                 />
                 </form>
             </React.Fragment>
