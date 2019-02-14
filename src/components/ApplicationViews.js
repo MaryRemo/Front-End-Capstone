@@ -12,6 +12,8 @@ import LoginForm from "./authentication/LoginForm"
 import SearchResults from './search/SearchResults'
 import SearchInput from './search/Search'
 import FriendsManager from "../modules/FriendsManager"
+import Friends from "./friends/Friends";
+import NavBar from "./nav/NavBar"
 
 const remoteURL = "http://localhost:5002"
 export default class ApplicationViews extends Component {
@@ -70,12 +72,29 @@ export default class ApplicationViews extends Component {
 
         BoredManager.getAll()
             .then(allActivities => {
-                // allActivities.sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
                 this.setState({
                     activities: allActivities
                 })
             })
 
+            BoredManager.sharedActivities()
+            .then(allActivities => {
+               this.setState({
+                sharedActivity: allActivities
+               })
+            })
+            FriendsManager.getAll()
+            .then(allFollowers =>
+                this.setState({
+                    followers: allFollowers
+                })
+            )
+            BoredManager.followersSharedActivities()
+            .then(follow => 
+                this.setState({
+                    myFollowers: follow
+                })
+            )
     }
 
     randomActivities = (newActivity) => BoredManager.api(newActivity)
@@ -125,17 +144,6 @@ export default class ApplicationViews extends Component {
 
     };
 
-    deleteFollowers = id => {
-        return fetch(`${remoteURL}/followers/${id}`, {
-            method: "DELETE"
-        })
-            .then(response => response.json())
-            .then(activity =>
-                this.setState({
-                    followers: activity
-                })
-            );
-    };
 
     updateActivity = (activityId, editedActivityObj) => {
         return BoredManager.put(activityId, editedActivityObj)
@@ -175,45 +183,60 @@ export default class ApplicationViews extends Component {
 
     verifyUser = (username, password) => {
         LoginManager.getUsernameAndPassword(username, password)
-            .then(allUsers => this.setState({
-                users: allUsers
-            }))
+        .then(allUsers => this.setState({
+            users: allUsers
+        }))
     }
-
+    
+    
+    
     addUser = newUser =>
-        LoginManager.post(newUser)
-            .then(() => LoginManager.getAll())
-            .then(user =>
-                this.setState({
-                    users: user
-                })
-            );
-    addFriend = friendObj =>
+    LoginManager.post(newUser)
+    .then(() => LoginManager.getAll())
+    .then(user =>
+        this.setState({
+            users: user
+        })
+        );
+        addFriend = friendObj =>
         FriendsManager.postNewFollower(friendObj)
+        
+        followersActivities = () => {
+            BoredManager.followersSharedActivities().then(allFollowers => console.log(allFollowers))
+        }
+        
+        
+        logout = evt => {
+            evt.preventDefault()
+            sessionStorage.removeItem("user");
+            this.setState({
+                followers: [],
+                activities: [],
+                sharedActivity: [],
+                comments: [],
+                messages: [],
+                userId: sessionStorage.getItem("user"),
+                myFollowers: []
+            })
+        }
+        render() {
+            console.log("SHARED", this.state.sharedActivity)
+            console.log("ALL", this.state.activities)
+            return (
+                
+                <React.Fragment>
 
-    followersActivities = () => {
-        BoredManager.followersSharedActivities().then(allFollowers => console.log(allFollowers))
-    }
-
-    mySharedActivities = () => {
-        BoredManager.mySharedActivities().then(shared => console.log(shared))
-    }
-
-
-    render() {
-        console.log("SHARED", this.state.sharedActivity)
-        console.log("ALL", this.state.activities)
-        return (
-
-            <React.Fragment>
+                   <NavBar {...this.props}
+        logout={this.logout}/>
 
                 <Route exact path="/login" render={(props) => {
-
+                    
                     return <Login {...props} component={Login}
 
                         verifyUser={this.verifyUser}
                         users={this.state.users}
-                        updateComponent={this.updateComponent} />
+                        updateComponent={this.updateComponent}
+                        followers={this.followers} />
                 }} />
 
                 <Route exact path="/login/new" render={(props) => {
@@ -314,6 +337,17 @@ export default class ApplicationViews extends Component {
                 }}
 
                 />
+                 <Route path="/Friends" render={(props) => {
+                    if (this.isAuthenticated()) {
+                        return <Friends {...this.props} 
+                        followers={this.state.followers}
+                        
+                        />
+                    }   
+                    else {
+                        return <Redirect to="/login" />
+                    }
+                }} />
 
             </React.Fragment >
         )

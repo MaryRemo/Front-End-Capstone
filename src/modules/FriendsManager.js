@@ -1,9 +1,9 @@
 const remoteURL = "http://localhost:5002";
 
 export default {
-  getAll() {
-    return fetch(`${remoteURL}/followers`).then(e => e.json());
-  },
+    getAll(id) {
+      return fetch(`${remoteURL}/followers?currentUserId=${id}&_expand=user`).then(e => e.json());
+      },
 
   postNewFollower(friendObj) {
     return fetch(`${remoteURL}/followers`, {

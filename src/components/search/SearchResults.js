@@ -1,6 +1,22 @@
 import React, { Component } from "react";
+import FriendsManager from "../../modules/FriendsManager"
+
+
 
 export default class SearchResults extends Component {
+
+  state = {
+    followers: []
+};
+componentDidMount() {
+    FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers =>{
+        this.setState({
+            followers:allFollowers
+        })
+    })
+}
+
+
 
   constructFollower = (userId) => {
     const friendObj = {
@@ -9,7 +25,6 @@ export default class SearchResults extends Component {
     }
     this.props.addFriend(friendObj)
   }
-  // if (this.props.myFollowers)
   
   render() {
     console.log(this.props.myFollowers)
@@ -18,7 +33,7 @@ export default class SearchResults extends Component {
         <div>
         {this.props.users.map(result => {
           console.log("whattt", result)
-          return <div key={result.id}>{result.username}            
+          return <div id={result.id} key={result.id}>{result.username}        
             <button type="button"
               id="addButton"
               onClick={
