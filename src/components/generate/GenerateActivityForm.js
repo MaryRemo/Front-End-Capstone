@@ -20,6 +20,13 @@ export default class GenerateActivityForm extends Component {
         });
     }
 
+    handleFieldChange = evt => {
+        const stateToChange = {}
+        stateToChange[evt.target.id] = evt.target.value
+        this.setState(stateToChange)
+      }
+  
+
     constructNewActivities = evt => {
         let months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
         let d = new Date();
@@ -60,6 +67,7 @@ export default class GenerateActivityForm extends Component {
                         <label htmlFor="activityName">Activity</label>
                         <input type="text" required
                                className="form-control"
+                               onChange={this.handleFieldChange}
                                id="activity" 
                                value={this.state.activity}
                                />

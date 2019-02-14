@@ -10,8 +10,11 @@ export default class SharedActivities extends Component {
         return (
             
             <div>
-           { this.props.sharedActivity.map(activity => {
-                return this.props.myFollowers.map(follower => {
+           { [].concat(this.props.sharedActivity)
+               .sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
+               .reverse()
+               .map(activity => {
+               return this.props.myFollowers.map(follower => {
                     if (follower.userId === activity.userId || Number(sessionStorage.getItem("user")) === activity.userId) {
                         return <div key={activity.id} className="card">
                             <div className="card-body">

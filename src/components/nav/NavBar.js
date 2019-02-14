@@ -5,7 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 class NavBar extends Component {
 
-    handleItemClick = () => {
+    handleItemClick = evt => {
+        evt.preventDefault()
         sessionStorage.clear();
     }
     render() {
@@ -21,8 +22,8 @@ class NavBar extends Component {
                     <li className="nav-item">
                         <Link className="nav-link" to="/Activities">Activities</Link>
                     </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" onClick={this.handleItemClick}to="/Login">Logout</Link>
+                    <li  onClick={this.handleItemClick} className="nav-item">
+                        <Link className="nav-link"to="/Login">Logout</Link>
                     </li>
                 </ul>
             </nav>

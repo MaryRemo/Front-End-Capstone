@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import BoredManager from "../../modules/BoredManager";
 // import $ from 'jquery'
 
 export default class ActivityList extends Component {
@@ -15,31 +16,13 @@ export default class ActivityList extends Component {
     }
 
     render() {
-
-        // let months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-        // let d = new Date();
-        // let month = d.getMonth();
-        // let date = d.getDate();
-        // let year = d.getFullYear();
-        // let hours = d.getHours();
-        // let minutes = ("0" + d.getMinutes()).slice(-2);
-        // let suffix = "AM";
-	    // if (hours > 12) {
-		//     suffix = "PM";
-		//     hours = hours - 12;
-        // }
-        // else if (hours === 12) {
-		//     suffix = "PM";
-        // }
-        // let dateDisplay = months[month] + "/" + date + "/" + year + " at " + hours + ":" + minutes + " " + suffix;
-
-        const sortedActivitiesItems =
-            // [].concat(this.props.activities)
-            //     .sort((a,b) => {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
-            //     .reverse()
-        this.props.activities.map(activity =>
-            <React.Fragment key={activity.id}>
-           {console.log("activity", activity)}
+console.log(this.props.activities)
+        const sortedActivitiesItems = 
+        [].concat(this.props.activities)
+        .sort(function(a,b) {return new Date(a.date) - new Date(b.date)})
+        .reverse()
+        .map(activity => 
+      <React.Fragment key={activity.id}>
                     <div key={activity.id} className="card">
                         <div className="card-body">
                             <p>{activity.user.username}</p>

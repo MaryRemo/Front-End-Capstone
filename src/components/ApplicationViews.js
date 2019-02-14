@@ -37,16 +37,21 @@ export default class ApplicationViews extends Component {
         ).then(() =>
 
             BoredManager.getAll()
-                .then(allActivities =>
+                .then(allActivities => {
+                    // allActivities.sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
                     newState.activities = allActivities
+                }
                 )).then(() =>
 
-                    BoredManager.sharedActivities().then(allActivities =>
+                    BoredManager.sharedActivities().then(allActivities => {
+                        // allActivities.sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
                         newState.sharedActivity = allActivities
+                    }
                     )).then(() =>
 
-                        BoredManager.followersSharedActivities().then(follow =>
+                        BoredManager.followersSharedActivities().then(follow => {
                             newState.myFollowers = follow
+                        }
                         )).then(() =>
 
 
@@ -65,6 +70,7 @@ export default class ApplicationViews extends Component {
 
         BoredManager.getAll()
             .then(allActivities => {
+                // allActivities.sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
                 this.setState({
                     activities: allActivities
                 })
@@ -103,11 +109,13 @@ export default class ApplicationViews extends Component {
             .then(response => response.json())
             .then(() => fetch(`${remoteURL}/activities?_expand=user&userId=${sessionUserNumber}`))
             .then(response => response.json())
-            .then(activity =>
+            .then(activity => {
+                // activity.sort(function (a, b) { return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime() })
+                //     .reverse()
                 this.setState({
                     activities: activity
                 })
-            )
+            })
             .then(() => BoredManager.sharedActivities())
             .then(allActivities => {
                 this.setState({
@@ -193,16 +201,13 @@ export default class ApplicationViews extends Component {
 
 
     render() {
-
-        // this.followersActivities()
-        // console.log("is this doing anything", this.followersActivities())
         console.log("SHARED", this.state.sharedActivity)
         console.log("ALL", this.state.activities)
         return (
 
             <React.Fragment>
 
-                <Route path="/login" render={(props) => {
+                <Route exact path="/login" render={(props) => {
 
                     return <Login {...props} component={Login}
 
@@ -212,15 +217,12 @@ export default class ApplicationViews extends Component {
                 }} />
 
                 <Route exact path="/login/new" render={(props) => {
-                    if (this.isAuthenticated()) {
                         return <LoginForm {...props}
                             users={this.state.users}
                             addUser={this.addUser}
                             userId={this.state.userId}
                             updateComponent={this.updateComponent} />
-                    } else {
-                        return <Redirect to="/login" />
-                    }
+                   
                 }} />
 
                 <Route exact path="/Home" render={(props) => {
@@ -303,6 +305,7 @@ export default class ApplicationViews extends Component {
                         return <SearchResults {...this.props}
                             addFriend={this.addFriend}
                             deleteFollowers={this.deleteFollowers}
+                            myFollowers={this.state.myFollowers}
                         />
                     }
                     else {

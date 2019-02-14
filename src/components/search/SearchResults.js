@@ -3,36 +3,35 @@ import React, { Component } from "react";
 export default class SearchResults extends Component {
 
   constructFollower = (userId) => {
-          const friendObj = {
-              currentUserId: Number(sessionStorage.getItem("user")),
-              userId: userId
-          }
+    const friendObj = {
+      currentUserId: Number(sessionStorage.getItem("user")),
+      userId: userId
+    }
     this.props.addFriend(friendObj)
   }
-
+  // if (this.props.myFollowers)
+  
   render() {
-    console.log(this.props.users)
+    console.log(this.props.myFollowers)
     return (
       <React.Fragment>
-        <section className="searchResults">
-          <h2>{Object.keys(this.props)[0]}</h2>
-          {this.props.users.map(result => (
-            <p>{result.username}
+        <div>
+        {this.props.users.map(result => {
+          console.log("whattt", result)
+          return <div key={result.id}>{result.username}            
             <button type="button"
-                                id="addButton"
-                                onClick={
-                                    () => this.constructFollower(result.id)}
-                                className="btn btn-success">
-                                Follow</button>
-                                <button type="button"
-                                id="deleteButton"
-                                onClick={() => this.props.deleteFollowers(result.id)}
-                                className="btn btn-success">
-                                UnFollow
-                            </button></p>
-          ))}
-        </section>
-      </React.Fragment>
-    );
+              id="addButton"
+              onClick={
+                () => this.constructFollower(result.id)}
+                className="btn btn-success">
+              Follow</button>
+                </div>
+                
+             
+      })
+    }
+    </div>
+        </React.Fragment>
+    )
   }
 }
