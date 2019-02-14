@@ -23,7 +23,7 @@ handleFieldChange = (evt) => {
 onLogin = (evt) => {
     evt.preventDefault();
     this.props.verifyUser(this.state.username, this.state.password)
-            if(this.props.users.length < 1) {
+            if(this.props.users.length < 0) {
                 alert("We can't seem to find you! Try registering below")
             } else {
                 // if(this.props.users.length < 1) {
@@ -34,6 +34,9 @@ onLogin = (evt) => {
                         }
                     if (loggedIn === true){
                         sessionStorage.setItem("user", user.id);
+
+                        this.props.updateComponent()
+
                         this.props.history.push("/Home");
                     }
                 })

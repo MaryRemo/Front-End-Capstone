@@ -8,7 +8,8 @@ export default class GenerateActivityForm extends Component {
         activity:"",
         timeStamp:"",
         shared:false,
-        userId: 1
+        userId: "",
+        id: ""
       }
     componentDidMount() {
         BoredManager.api().then(allActivities => {
@@ -18,20 +19,37 @@ export default class GenerateActivityForm extends Component {
             });
         });
     }
-    // getRandomActivities(){
-    //     BoredManager.api()
-    //     .then(response => {
-    //         console.log(response)
-    //     })
-    // }
+
+    handleFieldChange = evt => {
+        const stateToChange = {}
+        stateToChange[evt.target.id] = evt.target.value
+        this.setState(stateToChange)
+      }
+  
 
     constructNewActivities = evt => {
+        let months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+        let d = new Date();
+        let month = d.getMonth();
+        let date = d.getDate();
+        let year = d.getFullYear();
+        let hours = d.getHours();
+        let minutes = ("0" + d.getMinutes()).slice(-2);
+        let suffix = "AM";
+	    if (hours > 12) {
+		    suffix = "PM";
+		    hours = hours - 12;
+        }
+        else if (hours === 12) {
+		    suffix = "PM";
+        }
+        let dateDisplay = months[month] + "/" + date + "/" + year + " at " + hours + ":" + minutes + " " + suffix;
         evt.preventDefault()
         const activities = {
             activity: this.state.activity,
             shared:this.state.shared,
-            timeStamp:this.state.timeStamp,
-            userId: this.state.userId
+            timeStamp:dateDisplay,
+            userId: Number(sessionStorage.getItem("user"))
         }
         this.props.addActivities(activities)
         .then(() => console.log(activities))
@@ -49,7 +67,7 @@ export default class GenerateActivityForm extends Component {
                         <label htmlFor="activityName">Activity</label>
                         <input type="text" required
                                className="form-control"
-                            //    onChange={this.handleFieldChange}
+                               onChange={this.handleFieldChange}
                                id="activity" 
                                value={this.state.activity}
                                />

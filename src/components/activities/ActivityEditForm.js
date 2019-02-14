@@ -6,8 +6,9 @@ export default class ActivityEditForm extends Component {
     state = {
         "activity": "",
         "timeStamp": "",
-        "userId": 1,
-        "id": 2
+        "shared": false,
+        "userId": 0,
+        "id": 0
     }
 
     handleFieldChange = evt => {
@@ -23,9 +24,9 @@ export default class ActivityEditForm extends Component {
 
       const existingActivity = {
         activity: this.state.activity,
-        timeStamp: this.state.timeStamp,
-        userId: this.state.userId,
-        id: this.state.id
+        shared:this.state.shared,
+        timeStamp:this.state.timeStamp,
+        userId: Number(sessionStorage.getItem("user"))
       }
 console.log(this.props.match.params.activityId, existingActivity)
       this.props.updateActivity(this.props.match.params.activityId, existingActivity)
@@ -38,7 +39,8 @@ console.log(this.props.match.params.activityId, existingActivity)
         this.setState({
             activity: active.activity,
             timeStamp: active.timeStamp,
-            userId: active.userId,
+            shared: active.shared,
+            userId: Number(sessionStorage.getItem("user")),
             id: active.id
         })
       })
