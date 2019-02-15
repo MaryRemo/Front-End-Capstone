@@ -14,13 +14,6 @@ export default class Friends extends Component {
             })
         })
     }
-    componentDidUpdate() {
-        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers => {
-            this.setState({
-                followers: allFollowers
-            })
-        })
-    }
 
 
     deleteFollowers = id => {

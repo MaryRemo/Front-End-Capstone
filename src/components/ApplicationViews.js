@@ -332,7 +332,7 @@ export default class ApplicationViews extends Component {
                     }
                 }} />
 
-                <Route path="/Friends" render={(props) => {
+                <Route path="/Search" render={(props) => {
                     if (this.isAuthenticated()) {
                         return <SearchResults {...this.props}
                             addFriend={this.addFriend}

@@ -10,6 +10,8 @@ export default class SearchResults extends Component {
       userId: userId
     }
     this.props.addFriend(friendObj)
+    this.props.addActivities(friendObj)
+    .then(() => this.props.history.push("/Friends"))
   }
 
   render() {
@@ -20,12 +22,13 @@ export default class SearchResults extends Component {
         {this.props.users.map(result => {
           console.log("whattt", result)
           return <div id={result.id} key={result.id}>{result.username}        
-            <button type="button"
+            <Link type="button"
               id="addButton"
               onClick={
                 () => this.constructFollower(result.id)}
+                to = "/Friends"
                 className="btn btn-success">
-              Follow</button>
+              Follow</Link>
                 </div>
                 
                 

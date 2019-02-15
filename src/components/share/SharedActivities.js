@@ -15,12 +15,11 @@ export default class SharedActivities extends Component {
             sharedActivity: allActivities
            })
         })
-        FriendsManager.getAll()
-        .then(allFollowers =>
-            this.setState({
-                myFollowers: allFollowers
+        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers => {
+            this.setState({ 
+                followers: allFollowers
             })
-        )
+        })
         BoredManager.followersSharedActivities()
         .then(follow => 
             this.setState({
