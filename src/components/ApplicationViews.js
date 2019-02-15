@@ -77,20 +77,20 @@ export default class ApplicationViews extends Component {
                 })
             })
 
-            BoredManager.sharedActivities()
+        BoredManager.sharedActivities()
             .then(allActivities => {
-               this.setState({
-                sharedActivity: allActivities
-               })
+                this.setState({
+                    sharedActivity: allActivities
+                })
             })
-            FriendsManager.getAll()
+        FriendsManager.getAll()
             .then(allFollowers =>
                 this.setState({
                     followers: allFollowers
                 })
             )
-            BoredManager.followersSharedActivities()
-            .then(follow => 
+        BoredManager.followersSharedActivities()
+            .then(follow =>
                 this.setState({
                     myFollowers: follow
                 })
@@ -183,54 +183,61 @@ export default class ApplicationViews extends Component {
 
     verifyUser = (username, password) => {
         LoginManager.getUsernameAndPassword(username, password)
-        .then(allUsers => this.setState({
-            users: allUsers
-        }))
+            .then(allUsers => this.setState({
+                users: allUsers
+            }))
     }
-    
-    
-    
-    addUser = newUser =>
-    LoginManager.post(newUser)
-    .then(() => LoginManager.getAll())
-    .then(user =>
-        this.setState({
-            users: user
-        })
-        );
-        addFriend = friendObj =>
-        FriendsManager.postNewFollower(friendObj)
-        
-        followersActivities = () => {
-            BoredManager.followersSharedActivities().then(allFollowers => console.log(allFollowers))
-        }
-        
-        
-        logout = evt => {
-            evt.preventDefault()
-            sessionStorage.removeItem("user");
-            this.setState({
-                followers: [],
-                activities: [],
-                sharedActivity: [],
-                comments: [],
-                messages: [],
-                userId: sessionStorage.getItem("user"),
-                myFollowers: []
-            })
-        }
-        render() {
-            console.log("SHARED", this.state.sharedActivity)
-            console.log("ALL", this.state.activities)
-            return (
-                
-                <React.Fragment>
 
-                   <NavBar {...this.props}
-        logout={this.logout}/>
+
+
+    addUser = newUser =>
+        LoginManager.post(newUser)
+            .then(() => LoginManager.getAll())
+            .then(user =>
+                this.setState({
+                    users: user
+                })
+            );
+    addFriend = (friendObj) =>
+        FriendsManager.postNewFollower(friendObj)
+            .then(() => FriendsManager.getAll())
+            .then(allFollowers => {
+                this.setState({
+                    followers: allFollowers
+                })
+            })
+
+
+    followersActivities = () => {
+        BoredManager.followersSharedActivities().then(allFollowers => console.log(allFollowers))
+    }
+
+
+    logout = evt => {
+        evt.preventDefault()
+        sessionStorage.removeItem("user");
+        this.setState({
+            followers: [],
+            activities: [],
+            sharedActivity: [],
+            comments: [],
+            messages: [],
+            userId: sessionStorage.getItem("user"),
+            myFollowers: []
+        })
+    }
+    render() {
+        console.log("SHARED", this.state.sharedActivity)
+        console.log("ALL", this.state.activities)
+        return (
+
+            <React.Fragment>
+
+                <NavBar {...this.props}
+                    logout={this.logout} />
 
                 <Route exact path="/login" render={(props) => {
-                    
+
                     return <Login {...props} component={Login}
 
                         verifyUser={this.verifyUser}
@@ -240,12 +247,12 @@ export default class ApplicationViews extends Component {
                 }} />
 
                 <Route exact path="/login/new" render={(props) => {
-                        return <LoginForm {...props}
-                            users={this.state.users}
-                            addUser={this.addUser}
-                            userId={this.state.userId}
-                            updateComponent={this.updateComponent} />
-                   
+                    return <LoginForm {...props}
+                        users={this.state.users}
+                        addUser={this.addUser}
+                        userId={this.state.userId}
+                        updateComponent={this.updateComponent} />
+
                 }} />
 
                 <Route exact path="/Home" render={(props) => {
@@ -271,6 +278,7 @@ export default class ApplicationViews extends Component {
                         addActivities={this.addActivities}
                     />
                 }} />
+
                 <Route exact path="/Home/generate" render={(props) => {
                     if (this.isAuthenticated()) {
                         return <GenerateActivityForm {...props}
@@ -316,7 +324,8 @@ export default class ApplicationViews extends Component {
 
                 <Route path="/Friends" render={(props) => {
                     if (this.isAuthenticated()) {
-                        return <SearchInput {...this.props} />
+                        return <SearchInput {...this.props} 
+                        addFriend={this.addFriend}/>
                     }
                     else {
                         return <Redirect to="/login" />
@@ -337,13 +346,14 @@ export default class ApplicationViews extends Component {
                 }}
 
                 />
-                 <Route path="/Friends" render={(props) => {
+                <Route path="/Friends" render={(props) => {
                     if (this.isAuthenticated()) {
-                        return <Friends {...this.props} 
-                        followers={this.state.followers}
-                        
+                        return <Friends {...this.props}
+                        addFriend={this.addFriend}
+                            followers={this.state.followers}
+
                         />
-                    }   
+                    }
                     else {
                         return <Redirect to="/login" />
                     }

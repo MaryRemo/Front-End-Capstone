@@ -4,19 +4,24 @@ import BoredManager from "../../modules/BoredManager"
 
 export default class Friends extends Component {
 
-
-    // if (this.props.myFollowers)
     state = {
         followers: []
     };
-    componentDidMount() {
-        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers =>{
+    componentDidMount(){
+        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers => {
             this.setState({
-                followers:allFollowers
+                followers: allFollowers
             })
         })
     }
-    
+    componentDidUpdate() {
+        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers => {
+            this.setState({
+                followers: allFollowers
+            })
+        })
+    }
+
 
     deleteFollowers = id => {
         return fetch(`http://localhost:5002/followers/${id}`, {
@@ -47,11 +52,11 @@ export default class Friends extends Component {
                             <div className="card-body">
                                 <h3>{follower.user.username}</h3>
                                 <button type="button"
-              id="deleteButton"
-              onClick={
-                () => this.deleteFollowers(follower.id)}
-                className="btn btn-success">
-              Unfollow</button>
+                                    id="deleteButton"
+                                    onClick={
+                                        () => this.deleteFollowers(follower.id)}
+                                    className="btn btn-success">
+                                    Unfollow</button>
                             </div>
                         </div>
                     })}</div>

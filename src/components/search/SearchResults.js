@@ -1,21 +1,7 @@
 import React, { Component } from "react";
-import FriendsManager from "../../modules/FriendsManager"
-
-
+import { Link } from "react-router-dom";
 
 export default class SearchResults extends Component {
-
-  state = {
-    followers: []
-};
-componentDidMount() {
-    FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers =>{
-        this.setState({
-            followers:allFollowers
-        })
-    })
-}
-
 
 
   constructFollower = (userId) => {
@@ -25,7 +11,7 @@ componentDidMount() {
     }
     this.props.addFriend(friendObj)
   }
-  
+
   render() {
     console.log(this.props.myFollowers)
     return (
@@ -41,6 +27,7 @@ componentDidMount() {
                 className="btn btn-success">
               Follow</button>
                 </div>
+                
                 
              
       })
