@@ -15,7 +15,7 @@ class SearchInput extends Component{
     handleSearch = evt => {
         evt.preventDefault()
         this.props.searchAllData(this.state.searchQuery)
-        .then(() => this.props.history.push("/Friends"))
+        .then(() => this.props.history.push("/Search"))
     }
     render() {
         return(

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
-import BoredManager from "../../modules/BoredManager";
-// import $ from 'jquery'
+import { Card, CardImg, CardText, CardBody,
+    CardTitle, CardSubtitle, Button } from 'reactstrap';
 
 export default class ActivityList extends Component {
     state = {
         shared: false
     }
+
 
     handleFieldChange = evt => {
         evt.preventDefault()

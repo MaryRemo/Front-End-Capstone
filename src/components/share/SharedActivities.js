@@ -1,21 +1,43 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
+import BoredManager from "../../modules/BoredManager"
+import FriendsManager from "../../modules/FriendsManager"
 
 export default class SharedActivities extends Component {
     state = {
-        sharedActivity: []
+        sharedActivity: [],
+        myFollowers:[]
     };
+
+    componentDidMount () {
+        BoredManager.sharedActivities()
+        .then(allActivities => {
+           this.setState({
+            sharedActivity: allActivities
+           })
+        })
+        FriendsManager.getAll(Number(sessionStorage.getItem("user"))).then(allFollowers => {
+            this.setState({ 
+                followers: allFollowers
+            })
+        })
+        BoredManager.followersSharedActivities()
+        .then(follow => 
+            this.setState({
+                myFollowers: follow
+            })
+        )
+    }
 
     render() {
         return (
             
             <div>
-           { [].concat(this.props.sharedActivity)
+           { [].concat(this.state.sharedActivity)
                .sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
                .reverse()
                .map(activity => {
-               return this.props.myFollowers.map(follower => {
-                    if (follower.userId === activity.userId || Number(sessionStorage.getItem("user")) === activity.userId) {
+               return this.state.myFollowers.map(follower => {
+                    if (follower.userId === activity.userId) {
                         return <div key={activity.id} className="card">
                             <div className="card-body">
                                 <p>{activity.user.username}</p>

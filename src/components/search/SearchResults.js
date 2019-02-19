@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class SearchResults extends Component {
+
 
   constructFollower = (userId) => {
     const friendObj = {
@@ -8,9 +10,10 @@ export default class SearchResults extends Component {
       userId: userId
     }
     this.props.addFriend(friendObj)
+    this.props.addActivities(friendObj)
+    .then(() => this.props.history.push("/Friends"))
   }
-  // if (this.props.myFollowers)
-  
+
   render() {
     console.log(this.props.myFollowers)
     return (
@@ -18,14 +21,16 @@ export default class SearchResults extends Component {
         <div>
         {this.props.users.map(result => {
           console.log("whattt", result)
-          return <div key={result.id}>{result.username}            
-            <button type="button"
+          return <div id={result.id} key={result.id}>{result.username}        
+            <Link type="button"
               id="addButton"
               onClick={
                 () => this.constructFollower(result.id)}
+                to = "/Friends"
                 className="btn btn-success">
-              Follow</button>
+              Follow</Link>
                 </div>
+                
                 
              
       })
