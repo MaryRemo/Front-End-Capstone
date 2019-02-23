@@ -1,3 +1,14 @@
+.card-columns {
+  @include media-breakpoint-only(xl) {
+    column-count: 4;
+  }
+}
+
+body {
+  background-color: 	#D3D3D3;
+}
+
+
 .logInForm{
     display:flex;
     justify-content:center;

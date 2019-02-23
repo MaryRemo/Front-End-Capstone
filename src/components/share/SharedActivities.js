@@ -30,7 +30,6 @@ export default class SharedActivities extends Component {
 
     render() {
         return (
-            
             <div>
            { [].concat(this.state.sharedActivity)
                .sort(function(a,b) {return new Date(b.newsDate).getTime() - new Date(a.newsDate).getTime()})
@@ -38,18 +37,33 @@ export default class SharedActivities extends Component {
                .map(activity => {
                return this.state.myFollowers.map(follower => {
                     if (follower.userId === activity.userId) {
-                        return <div key={activity.id} className="card">
-                            <div className="card-body">
-                                <p>{activity.user.username}</p>
-                                <h3 className="card-title" key={activity.id} id="{activity.activity}">{activity.activity}</h3>
-                                <h2 id="{activity.timeStamp}"
-                        className="card-title"> {activity.timeStamp}</h2>
+                        return    <div class="card mx-auto w-50">
+                        <div class="card-head">
+                            <div class="card-header">
+                            <img src="https://us.123rf.com/450wm/imagevectors/imagevectors1606/imagevectors160600227/58872995-white-profile-icon-on-blue-button-isolated-on-white.jpg?ver=6" alt="Smiley face" height="42" width="42"></img>
+                                <h2>{activity.user.username}</h2>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="product-desc">
+                                <div class="product-title">Activity:</div>
+                                {/* <hr></hr> */}
+                                <h3 id="{activity.activity}"
+                                onChange={this.handleFieldChange}>{activity.activity}
+                            </h3>
+                                <hr></hr>
+                                <p class="timestamp">
+                                    {activity.timeStamp}
+                                </p>
+                                <hr></hr>
+                            </div>
+                        </div>
                         </div>
                     }
                 })
-        
-            })}</div>
+                
+            })}
+            </div>
             )
         } 
     }
