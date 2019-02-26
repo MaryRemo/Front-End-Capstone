@@ -27,7 +27,7 @@ export default class SearchResults extends Component {
               onClick={
                 () => this.constructFollower(result.id)}
                 to = "/Friends"
-                className="btn btn-success">
+                className="btn btn-outline-primary">
               Follow</Link>
                 </div>
                 

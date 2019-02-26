@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import {Button} from "reactstrap"
 
 export default class ActivityList extends Component {
     state = {
@@ -24,11 +25,10 @@ export default class ActivityList extends Component {
                     <React.Fragment key={activity.id}>
 
 
-                        <div className="card mx-auto w-50">
+                        <div className="card mx-auto w-75">
                             <div className="card-head">
                                 <div className="card-header">
-                                <img src="https://us.123rf.com/450wm/imagevectors/imagevectors1606/imagevectors160600227/58872995-white-profile-icon-on-blue-button-isolated-on-white.jpg?ver=6" alt="Smiley face" height="42" width="42"></img>
-                                    <h2>{activity.user.username}</h2>
+                                    <h2> <img src="https://us.123rf.com/450wm/imagevectors/imagevectors1606/imagevectors160600227/58872995-white-profile-icon-on-blue-button-isolated-on-white.jpg?ver=6" alt="Smiley face" height="42" width="42"></img> {activity.user.username}</h2>
                                 </div>
                             </div>
                             <div className="card-body">
@@ -77,7 +77,7 @@ export default class ActivityList extends Component {
                                             Delete
 </button>
 
-                                        <Link type="button" id="editbutton" to={`/Home/${activity.id}/edit`} className="btn btn-outline-primary">Edit</Link>
+                                        <Button tag={Link} color="link" id="editbutton" to={`/Home/${activity.id}/edit`} className="btn btn-outline-primary">Edit</Button>
                                     </div>
                                 </div>
                             </div>
@@ -93,13 +93,14 @@ export default class ActivityList extends Component {
         return (
             <React.Fragment>
                 <div className="homePage">
+                <br></br>
                     <h2 className="title">The Bored App</h2>
                     <br></br>
-                   
+                   <div className="text-center">
                         <div className="createButton">
                             <button type="button"
                                 onClick={() => this.props.history.push("/Home/new")}
-                                className="btn btn-success">
+                                className="btn btn-outline-primary">
                                 Create Activity
                     </button>
                         </div>
@@ -107,11 +108,11 @@ export default class ActivityList extends Component {
                         <div className="generateButton">
                             <button type="button"
                                 onClick={() => this.props.history.push("/Home/generate")}
-                                className="btn btn-success">
+                                className="btn btn-outline-primary">
                                 Generate Activity
                     </button>
                         </div>
-                       
+                        </div>
                        
                     <section className="activities">
                         <br></br>

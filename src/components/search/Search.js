@@ -24,7 +24,7 @@ class SearchInput extends Component{
                 <input
                 type="text"
                 required
-                className="form-control"
+                className="form-control w-25"
                 onChange={this.handleFieldChange}
                 id="searchQuery"
                 placeholder="Search"

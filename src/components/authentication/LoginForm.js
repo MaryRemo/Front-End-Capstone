@@ -38,7 +38,7 @@ export default class LoginForm extends Component {
     render() {
         return (
             <React.Fragment>
-                <form className="LoginForm">
+                <form className="LoginForm card">
                     <div className="form-group">
                         <label htmlFor="username">Username: </label>
                         <input type="text" required
