@@ -45,7 +45,7 @@ onLogin = (evt) => {
 
 render() {
     return (
-        <form className="logInForm" onSubmit={this.onLogin}>
+        <form className="logInForm card" onSubmit={this.onLogin}>
             <h1 className="h3 mb-3 font-weight-normal title">Please sign in</h1>
             <label htmlFor="inputUsername">
                 Username

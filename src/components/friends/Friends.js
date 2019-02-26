@@ -38,17 +38,19 @@ export default class Friends extends Component {
         return (
 
             <div>
+                <br></br>
                 <h2>Your Friends</h2>
+                <hr></hr>
                 {this.state.followers
                     .map(follower => {
-                        return <div key={follower.id} className="card">
-                            <div className="card-body">
+                        return <div key={follower.id}>
+                            <div>
                                 <h3>{follower.user.username}</h3>
                                 <button type="button"
                                     id="deleteButton"
                                     onClick={
                                         () => this.deleteFollowers(follower.id)}
-                                    className="btn btn-success">
+                                    className="btn btn-outline-primary">
                                     Unfollow</button>
                             </div>
                         </div>
