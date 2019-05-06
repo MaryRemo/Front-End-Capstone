@@ -1,6 +1,11 @@
 #### The Bored App
 A React App that randomly generates activities for a user that they can share with friends! I built this app because I realized I always did the same old thing(watch Netflix on my couch). I wanted to create something that would get me out of that rut!  I used  React to access the TheBoredAPI so that the user could click a button to randomly generate an activity that the user could save to their personal activity board. If they choose to share it, their friends will be able see it. The user can also see activities that their friends have shared. Users can edit and delete these  activities. The user also if they choose can follow and unfollow other users. I styled the app using CSS and Bootstrap.
 
+## Clone this repository
+To install all libraries and their dependencies, run npm install
+In the /api directory, run json-server -p 5002 database.json
+Run npm start in root directory to start react server
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
